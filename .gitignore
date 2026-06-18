@@ -1,0 +1,11 @@
+# Internal design artifacts — not part of the published site
+uploads/
+screenshots/
+.thumbnail
+Design prompt file.zip
+Omnie.png
+
+# OS / editor cruft
+Thumbs.db
+.DS_Store
+desktop.ini
