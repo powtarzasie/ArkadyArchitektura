@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Arkady Architektura and Design — architektura wnętrz, Łódź</title>
 <meta name="description" content="Luksusowe, ponadczasowe wnętrza — Katarzyna Janicka-Świerguła, architektka wnętrz i doktor architektury. Pełna odpowiedzialność za każdy detal, od koncepcji po realizację. Łódź · cała Polska." />
 <link rel="canonical" href="https://powtarzasie.github.io/ArkadyArchitektura/" />
@@ -42,6 +42,9 @@
   *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; background:#F6F2EC; }
   ::selection{ background:#A8895C; color:#F6F2EC; }
+
+  /* mobile: kill 300ms tap delay + give tappable things a brass-tinted highlight */
+  a, button, [role="link"], input, textarea, .nav-toggle, .ig-cell, .tile, .step{ touch-action:manipulation; -webkit-tap-highlight-color:rgba(168,137,92,0.18); }
 
   /* small brass TEXT uses the deeper, AA-compliant tone (decorative brass stays #A8895C) */
   .eyebrow{ color:var(--brass-text) !important; }
@@ -186,6 +189,8 @@
     .iggrid{ grid-template-columns:repeat(3,1fr) !important; }
     /* process steps: tighten the oversized number gutter */
     .step{ grid-template-columns:54px 1fr !important; gap:18px !important; }
+    /* form fields: comfortable ≥44px touch height on mobile */
+    .fld{ padding:13px 0 !important; }
   }
   @media (max-width:520px){
     .footer-grid{ grid-template-columns:1fr !important; }
@@ -246,7 +251,7 @@
         <a onClick="{{ item.onClick }}" style="{{ item.style }}">{{ item.label }}</a>
       </sc-for>
     </div>
-    <a class="nav-toggle" onClick="{{ toggleMenu }}" aria-label="Otwórz menu" style="display:none; flex-direction:column; justify-content:center; gap:5px; width:34px; height:34px; cursor:pointer;">
+    <a class="nav-toggle" onClick="{{ toggleMenu }}" aria-label="Otwórz menu" style="display:none; flex-direction:column; align-items:center; justify-content:center; gap:5px; width:44px; height:44px; margin-right:-6px; cursor:pointer;">
       <span style="display:block; width:26px; height:1.5px; background:#20201E;"></span>
       <span style="display:block; width:26px; height:1.5px; background:#20201E;"></span>
       <span style="display:block; width:26px; height:1.5px; background:#20201E;"></span>
@@ -255,10 +260,10 @@
 
   <!-- MOBILE MENU OVERLAY -->
   <sc-if value="{{ menu }}" hint-placeholder-val="{{ false }}">
-    <div class="nav-overlay pg" style="position:fixed; inset:0; z-index:60; background:rgba(246,242,236,0.98); backdrop-filter:blur(8px); display:flex; flex-direction:column; padding:20px clamp(24px,6vw,48px) 40px;">
+    <div class="nav-overlay pg" style="position:fixed; inset:0; z-index:60; background:rgba(246,242,236,0.98); backdrop-filter:blur(8px); display:flex; flex-direction:column; padding:max(20px,env(safe-area-inset-top)) clamp(24px,6vw,48px) max(40px,env(safe-area-inset-bottom));">
       <div style="display:flex; align-items:center; justify-content:space-between;">
         <img src="assets/logo-clear.png" alt="Arkady Architektura and Design" style="height:30px; width:auto;" />
-        <a onClick="{{ toggleMenu }}" aria-label="Zamknij menu" style="cursor:pointer; font-family:'Jost',sans-serif; font-size:30px; line-height:1; color:#20201E;">&times;</a>
+        <a onClick="{{ toggleMenu }}" aria-label="Zamknij menu" style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; margin:-6px -10px 0 0; cursor:pointer; font-family:'Jost',sans-serif; font-size:30px; line-height:1; color:#20201E;">&times;</a>
       </div>
       <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:4px;">
         <sc-for list="{{ nav }}" as="item" hint-placeholder-count="5">
@@ -276,8 +281,8 @@
 
     <!-- HERO A : full bleed -->
     <sc-if value="{{ heroA }}" hint-placeholder-val="{{ true }}">
-      <section style="position:relative; height:90vh; min-height:600px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-        <img data-ph="hero" src="{{ heroCover }}" alt="Wnętrze projektu Arkady Architektura — ciepła, ponadczasowa przestrzeń" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:slowZoom 18s ease-out both;" />
+      <section style="position:relative; height:90vh; height:90dvh; min-height:600px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+        <img data-ph="hero" decoding="async" fetchpriority="high" src="{{ heroCover }}" alt="Wnętrze projektu Arkady Architektura — ciepła, ponadczasowa przestrzeń" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:slowZoom 18s ease-out both;" />
         <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,19,17,0.32) 0%, rgba(20,19,17,0.18) 40%, rgba(20,19,17,0.5) 100%);"></div>
         <div style="position:relative; text-align:center; color:#F6F2EC; max-width:820px; padding:0 24px;">
           <img src="assets/logo-clear-cream.png" alt="Arkady Architektura and Design" style="height:54px; margin:0 auto 28px; display:block; opacity:0.95;" />
@@ -294,7 +299,7 @@
 
     <!-- HERO B : editorial split -->
     <sc-if value="{{ heroB }}" hint-placeholder-val="{{ true }}">
-      <section class="hero-split" style="display:grid; grid-template-columns:1fr 1.08fr; min-height:88vh;">
+      <section class="hero-split" style="display:grid; grid-template-columns:1fr 1.08fr; min-height:88vh; min-height:88dvh;">
         <div style="background:#F6F2EC; display:flex; flex-direction:column; justify-content:center; padding:clamp(40px,6vw,100px);">
           <img src="assets/logo-clear.png" alt="Arkady Architektura and Design" style="height:46px; margin-bottom:30px;" />
           <div style="font-size:12px; letter-spacing:0.34em; text-transform:uppercase; color:#A8895C; margin-bottom:22px;">Architektura wnętrz · Łódź</div>
@@ -306,7 +311,7 @@
           </div>
         </div>
         <div class="hero-split-img" style="position:relative; overflow:hidden; min-height:420px;">
-          <img data-ph="hero" src="{{ heroCover }}" alt="Wnętrze projektu Arkady Architektura — ciepła, ponadczasowa przestrzeń" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:slowZoom 18s ease-out both;" />
+          <img data-ph="hero" decoding="async" fetchpriority="high" src="{{ heroCover }}" alt="Wnętrze projektu Arkady Architektura — ciepła, ponadczasowa przestrzeń" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:slowZoom 18s ease-out both;" />
         </div>
       </section>
     </sc-if>
@@ -342,7 +347,7 @@
         <sc-for list="{{ featured }}" as="item" hint-placeholder-count="3">
           <a class="tile" onClick="{{ item.open }}" style="display:block; text-decoration:none; cursor:pointer;">
             <div class="frame" style="position:relative; overflow:hidden; aspect-ratio:4/5; background:#CFC6B8;">
-              <img data-ph="project" src="{{ item.cover }}" alt="{{ item.title }} — realizacja Arkady Architektura" style="width:100%; height:100%; object-fit:cover;" />
+              <img data-ph="project" loading="lazy" decoding="async" src="{{ item.cover }}" alt="{{ item.title }} — realizacja Arkady Architektura" style="width:100%; height:100%; object-fit:cover;" />
             </div>
             <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-top:18px;">
               <h3 style="font-family:'Cormorant Garamond',serif; font-weight:500; font-size:24px; margin:0; color:#20201E;">{{ item.title }}</h3>
@@ -372,7 +377,7 @@
     <section style="padding:clamp(60px,8vw,110px) clamp(24px,6vw,72px) clamp(40px,5vw,70px); max-width:1300px; margin:0 auto;">
       <div class="about-grid" style="display:grid; grid-template-columns:0.9fr 1.1fr; gap:clamp(36px,5vw,80px); align-items:center;">
         <div class="portrait-frame" style="position:relative; aspect-ratio:4/5; overflow:hidden; background:#CFC6B8;">
-          <img src="assets/portrait-katarzyna.jpg" alt="Portret — Katarzyna Janicka-Świerguła, architektka wnętrz i doktor architektury" style="width:100%; height:100%; object-fit:cover; object-position:center 18%;" />
+          <img src="assets/portrait-katarzyna.jpg" alt="Portret — Katarzyna Janicka-Świerguła, architektka wnętrz i doktor architektury" decoding="async" style="width:100%; height:100%; object-fit:cover; object-position:center 18%;" />
         </div>
         <div>
           <div class="eyebrow" style="font-size:12px; letter-spacing:0.3em; text-transform:uppercase; color:#A8895C; margin-bottom:22px;">O mnie</div>
@@ -418,14 +423,14 @@
     <section style="padding:clamp(60px,8vw,110px) clamp(24px,6vw,72px) clamp(30px,4vw,50px); max-width:1400px; margin:0 auto; text-align:center;">
       <div class="eyebrow" style="font-size:12px; letter-spacing:0.3em; text-transform:uppercase; color:#A8895C; margin-bottom:22px;">Portfolio</div>
       <h1 style="font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(40px,5.4vw,80px); line-height:1.04; margin:0 0 22px; color:#20201E;">Realizacje</h1>
-      <p style="font-size:16px; line-height:1.8; font-weight:300; color:rgba(32,32,30,0.66); max-width:560px; margin:0 auto;">Wybór projektów mieszkalnych i&nbsp;komercyjnych. Duże, wyraźne kadry i&nbsp;zwięzłe opisy — tak, jak lubię opowiadać o&nbsp;wnętrzach.</p>
+      <p style="font-size:16px; line-height:1.8; font-weight:300; color:rgba(32,32,30,0.74); max-width:560px; margin:0 auto;">Wybór projektów mieszkalnych i&nbsp;komercyjnych. Duże, wyraźne kadry i&nbsp;zwięzłe opisy — tak, jak lubię opowiadać o&nbsp;wnętrzach.</p>
     </section>
     <section style="padding:0 clamp(24px,6vw,72px) clamp(80px,10vw,140px); max-width:1400px; margin:0 auto;">
       <div class="rv-stagger pgrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px,1fr)); gap:clamp(30px,4vw,56px);">
         <sc-for list="{{ projects }}" as="item" hint-placeholder-count="6">
           <a class="tile" onClick="{{ item.open }}" style="display:block; text-decoration:none; cursor:pointer;">
             <div class="frame" style="position:relative; overflow:hidden; aspect-ratio:4/5; background:#CFC6B8;">
-              <img data-ph="project" src="{{ item.cover }}" alt="{{ item.title }} — realizacja Arkady Architektura" style="width:100%; height:100%; object-fit:cover;" />
+              <img data-ph="project" loading="lazy" decoding="async" src="{{ item.cover }}" alt="{{ item.title }} — realizacja Arkady Architektura" style="width:100%; height:100%; object-fit:cover;" />
               <span style="position:absolute; bottom:16px; left:20px; z-index:3; font-family:'Cormorant Garamond',serif; font-size:20px; color:#F6F2EC; text-shadow:0 1px 8px rgba(0,0,0,0.5);">{{ item.num }}</span>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-top:20px;">
@@ -447,13 +452,13 @@
       <a class="lnk" onClick="{{ openProjects }}" style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(32,32,30,0.55); cursor:pointer; text-decoration:none;">← Wszystkie realizacje</a>
       <div style="font-size:12px; letter-spacing:0.24em; text-transform:uppercase; color:#7c5d2e; margin:30px 0 18px;">{{ cur.tags }}</div>
       <h1 style="font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(38px,5vw,74px); line-height:1.04; margin:0 0 26px; color:#20201E;">{{ cur.title }}</h1>
-      <div style="display:flex; gap:clamp(20px,4vw,52px); justify-content:center; flex-wrap:wrap; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(32,32,30,0.6);">
-        <span>{{ cur.location }}</span><span style="color:#A8895C;">·</span><span>{{ cur.scope }}</span><span style="color:#A8895C;">·</span><span>{{ cur.year }}</span>
+      <div style="display:flex; gap:clamp(20px,4vw,52px); justify-content:center; flex-wrap:wrap; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(32,32,30,0.72);">
+        <span>{{ cur.location }}</span><span style="color:#A8895C;" aria-hidden="true">·</span><span>{{ cur.scope }}</span><span style="color:#A8895C;" aria-hidden="true">·</span><span>{{ cur.year }}</span>
       </div>
     </section>
 
     <section style="width:100%; aspect-ratio:16/8; overflow:hidden; background:#CFC6B8;">
-      <img src="{{ cur.cover }}" alt="{{ cur.title }}" style="width:100%; height:100%; object-fit:cover;" />
+      <img src="{{ cur.cover }}" alt="{{ cur.title }}" decoding="async" style="width:100%; height:100%; object-fit:cover;" />
     </section>
 
     <section style="padding:clamp(60px,8vw,110px) clamp(24px,6vw,72px); max-width:820px; margin:0 auto; text-align:center;">
@@ -464,7 +469,7 @@
       <div style="display:flex; flex-direction:column; gap:clamp(20px,3vw,40px);">
         <sc-for list="{{ cur.gallery }}" as="g" hint-placeholder-count="3">
           <div class="rv" style="overflow:hidden; background:#CFC6B8;">
-            <img data-ph="gallery" src="{{ g.src }}" alt="{{ cur.title }} — wnętrze realizacji" style="width:100%; display:block; object-fit:cover; max-height:760px;" />
+            <img data-ph="gallery" loading="lazy" decoding="async" src="{{ g.src }}" alt="{{ cur.title }} — wnętrze realizacji" style="width:100%; display:block; object-fit:cover; max-height:760px;" />
           </div>
         </sc-for>
       </div>
@@ -556,7 +561,7 @@
 
         <div style="background:#E7E0D6; padding:clamp(30px,4vw,54px);">
           <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
-            <div style="min-height:380px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+            <div role="status" aria-live="polite" style="min-height:380px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
               <img src="assets/logo-clear.png" alt="Arkady Architektura and Design" style="height:42px; margin-bottom:24px; opacity:0.9;" />
               <h3 style="font-family:'Cormorant Garamond',serif; font-weight:400; font-size:32px; margin:0 0 12px; color:#20201E;">Dziękuję!</h3>
               <p style="font-size:15px; font-weight:300; color:rgba(32,32,30,0.72); margin:0; max-width:300px; line-height:1.7;">Wiadomość została wysłana. Odezwę się najszybciej, jak to możliwe.</p>
@@ -566,21 +571,22 @@
             <div></div>
           </sc-if>
           <form onSubmit="{{ submit }}" style="display:flex; flex-direction:column; gap:26px;">
+            <p style="font-size:11px; letter-spacing:0.04em; font-weight:300; color:rgba(32,32,30,0.7); margin:0;">Pola oznaczone <span style="color:#7c5d2e;">*</span> są wymagane.</p>
             <div>
-              <label style="display:block; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(32,32,30,0.74); margin-bottom:9px;">Imię i nazwisko</label>
-              <input class="fld" type="text" style="width:100%; background:transparent; border:none; border-bottom:1px solid rgba(32,32,30,0.3); padding:8px 0; font-family:'Jost',sans-serif; font-size:16px; color:#20201E;" />
+              <label style="display:block; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(32,32,30,0.74); margin-bottom:9px;" for="f-name">Imię i nazwisko <span aria-hidden="true" style="color:#7c5d2e;">*</span></label>
+              <input class="fld" type="text" id="f-name" name="name" autocomplete="name" required="required" aria-required="true" style="width:100%; background:transparent; border:none; border-bottom:1px solid rgba(32,32,30,0.3); padding:8px 0; font-family:'Jost',sans-serif; font-size:16px; color:#20201E;" />
             </div>
             <div>
-              <label style="display:block; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(32,32,30,0.74); margin-bottom:9px;">E-mail</label>
-              <input class="fld" type="email" style="width:100%; background:transparent; border:none; border-bottom:1px solid rgba(32,32,30,0.3); padding:8px 0; font-family:'Jost',sans-serif; font-size:16px; color:#20201E;" />
+              <label style="display:block; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(32,32,30,0.74); margin-bottom:9px;" for="f-email">E-mail <span aria-hidden="true" style="color:#7c5d2e;">*</span></label>
+              <input class="fld" type="email" id="f-email" name="email" autocomplete="email" inputmode="email" required="required" aria-required="true" style="width:100%; background:transparent; border:none; border-bottom:1px solid rgba(32,32,30,0.3); padding:8px 0; font-family:'Jost',sans-serif; font-size:16px; color:#20201E;" />
             </div>
             <div>
-              <label style="display:block; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(32,32,30,0.74); margin-bottom:9px;">Telefon</label>
-              <input class="fld" type="tel" style="width:100%; background:transparent; border:none; border-bottom:1px solid rgba(32,32,30,0.3); padding:8px 0; font-family:'Jost',sans-serif; font-size:16px; color:#20201E;" />
+              <label style="display:block; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(32,32,30,0.74); margin-bottom:9px;" for="f-phone">Telefon</label>
+              <input class="fld" type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel" style="width:100%; background:transparent; border:none; border-bottom:1px solid rgba(32,32,30,0.3); padding:8px 0; font-family:'Jost',sans-serif; font-size:16px; color:#20201E;" />
             </div>
             <div>
-              <label style="display:block; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(32,32,30,0.74); margin-bottom:9px;">Wiadomość</label>
-              <textarea class="fld" rows="4" style="width:100%; background:transparent; border:none; border-bottom:1px solid rgba(32,32,30,0.3); padding:8px 0; font-family:'Jost',sans-serif; font-size:16px; color:#20201E; resize:none;"></textarea>
+              <label style="display:block; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(32,32,30,0.74); margin-bottom:9px;" for="f-msg">Wiadomość <span aria-hidden="true" style="color:#7c5d2e;">*</span></label>
+              <textarea class="fld" rows="4" id="f-msg" name="message" required="required" aria-required="true" style="width:100%; background:transparent; border:none; border-bottom:1px solid rgba(32,32,30,0.3); padding:8px 0; font-family:'Jost',sans-serif; font-size:16px; color:#20201E; resize:none;"></textarea>
             </div>
             <button class="btn" type="submit" style="align-self:flex-start; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#F6F2EC; background:#20201E; border:1px solid #20201E; padding:16px 40px; cursor:pointer; margin-top:6px;">Wyślij wiadomość</button>
             <p style="font-size:11px; line-height:1.65; font-weight:300; color:rgba(32,32,30,0.55); margin:2px 0 0;">Wysyłając formularz, wyrażasz zgodę na przetwarzanie podanych danych w celu obsługi Twojego zapytania — szczegóły w <a onClick="{{ openPrivacy }}" class="lnk" style="color:#20201E; cursor:pointer; text-decoration:none;">Polityce prywatności</a>.</p>
@@ -670,7 +676,7 @@
     </div>
     <div class="iggrid rv" style="display:grid; grid-template-columns:repeat(6, 1fr); gap:clamp(6px,1vw,14px); margin-top:44px;">
       <sc-for list="{{ instagram }}" as="shot" hint-placeholder-count="6">
-        <a class="ig-cell" onClick="{{ openProjects }}" aria-label="Zobacz realizacje" style="display:block; aspect-ratio:1; overflow:hidden; cursor:pointer;"><img class="ig" data-ph="instagram" src="{{ shot.src }}" alt="{{ shot.alt }}" style="width:100%; height:100%; object-fit:cover; opacity:0.92;" /></a>
+        <a class="ig-cell" onClick="{{ openProjects }}" aria-label="Zobacz realizacje" style="display:block; aspect-ratio:1; overflow:hidden; cursor:pointer;"><img class="ig" data-ph="instagram" loading="lazy" decoding="async" src="{{ shot.src }}" alt="{{ shot.alt }}" style="width:100%; height:100%; object-fit:cover; opacity:0.92;" /></a>
       </sc-for>
     </div>
   </section>
@@ -679,7 +685,7 @@
   <footer style="background:#20201E; color:#E7E0D6; padding:clamp(60px,7vw,90px) clamp(24px,6vw,72px) clamp(34px,4vw,50px);">
     <div class="rv footer-grid" style="max-width:1300px; margin:0 auto; display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:clamp(36px,5vw,70px);">
       <div>
-        <img src="assets/logo-clear-cream.png" alt="Arkady Architektura and Design" style="max-width:300px; width:100%; height:auto; display:block; margin-bottom:24px; opacity:0.95;" />
+        <img src="assets/logo-clear-cream.png" alt="Arkady Architektura and Design" loading="lazy" decoding="async" style="max-width:300px; width:100%; height:auto; display:block; margin-bottom:24px; opacity:0.95;" />
         <p style="font-size:14px; font-weight:300; line-height:1.8; color:rgba(231,224,214,0.65); max-width:340px; margin:0;">Luksusowe, ponadczasowe wnętrza dla klientów indywidualnych i&nbsp;inwestorów. Łódź · cała Polska.</p>
       </div>
       <div>
@@ -701,7 +707,7 @@
         </div>
       </div>
     </div>
-    <div class="footer-base" style="max-width:1300px; margin:clamp(40px,5vw,60px) auto 0; padding-top:26px; border-top:1px solid rgba(231,224,214,0.16); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:12px; letter-spacing:0.06em; color:rgba(231,224,214,0.5);">
+    <div class="footer-base" style="max-width:1300px; margin:clamp(40px,5vw,60px) auto 0; padding-top:26px; border-top:1px solid rgba(231,224,214,0.16); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:12px; letter-spacing:0.06em; color:rgba(231,224,214,0.62);">
       <span>© 2026 Arkady Architektura sp. z o.o. · NIP 725-232-96-77</span>
       <span style="display:flex; gap:22px; flex-wrap:wrap; align-items:center;">
         <a onClick="{{ openPrivacy }}" class="lnk" style="color:rgba(231,224,214,0.62); text-decoration:none; cursor:pointer;">Polityka prywatności</a>
