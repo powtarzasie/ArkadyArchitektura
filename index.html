@@ -26,9 +26,53 @@
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png" />
+<!-- Boot guard: hide the un-hydrated template element and show a branded loader
+     until the framework mounts the app (#dc-root). Prevents the raw template flash
+     on slow or failed loads. The framework swaps the template element out for
+     #dc-root, so this rule can never hide the rendered app. NOTE: keep this comment
+     free of the template tag name in angle brackets and of double-brace tokens — the
+     runtime extracts the template by scanning the raw source for them. -->
+<style>
+  x-dc{ display:none !important; }
+  #dc-boot{ position:fixed; inset:0; z-index:2000; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; background:#F6F2EC; color:#20201E; font-family:'Jost',-apple-system,system-ui,'Segoe UI',sans-serif; text-align:center; padding:24px; transition:opacity .42s ease; }
+  #dc-boot .wm{ font-family:'Cormorant Garamond',Georgia,serif; font-size:30px; letter-spacing:0.4em; color:#20201E; padding-left:0.4em; }
+  #dc-boot .sub{ font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#7c5d2e; }
+  #dc-boot .spin{ width:24px; height:24px; border:2px solid rgba(32,32,30,0.16); border-top-color:#A8895C; border-radius:50%; animation:dcspin .9s linear infinite; }
+  #dc-boot .retry{ display:none; font-size:13px; line-height:1.7; color:rgba(32,32,30,0.78); }
+  #dc-boot .retry a{ color:#20201E; text-underline-offset:3px; cursor:pointer; }
+  @keyframes dcspin{ to{ transform:rotate(360deg); } }
+  @media (prefers-reduced-motion:reduce){ #dc-boot .spin{ animation:none; } }
+</style>
+<noscript><style>#dc-boot .spin,#dc-boot .sub{ display:none; } #dc-boot .retry{ display:block; }</style></noscript>
 <script src="./support.js"></script>
 </head>
 <body>
+<div id="dc-boot" role="status" aria-live="polite" aria-label="Ładowanie strony">
+  <div class="wm">ARKADY</div>
+  <div class="spin" aria-hidden="true"></div>
+  <div class="sub">Ładowanie…</div>
+  <div class="retry">Nie udało się w pełni załadować strony.<br><a href="#" onclick="location.reload();return false;">Odśwież stronę</a></div>
+</div>
+<script>
+(function(){
+  function manage(){
+    var fb = document.getElementById('dc-boot'); if(!fb) return;
+    var n = 0;
+    var iv = setInterval(function(){
+      var root = document.getElementById('dc-root');
+      if(root && root.children.length){          // framework mounted → reveal the site
+        clearInterval(iv); fb.style.opacity = '0';
+        setTimeout(function(){ if(fb.parentNode) fb.parentNode.removeChild(fb); }, 450);
+      } else if(++n >= 80){                        // ~12s without boot → offer a reload
+        clearInterval(iv);
+        var s=fb.querySelector('.spin'), sub=fb.querySelector('.sub'), r=fb.querySelector('.retry');
+        if(s) s.style.display='none'; if(sub) sub.style.display='none'; if(r) r.style.display='block';
+      }
+    }, 150);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', manage); else manage();
+})();
+</script>
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
