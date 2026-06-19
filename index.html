@@ -44,6 +44,11 @@
   @media (prefers-reduced-motion:reduce){ #dc-boot .spin{ animation:none; } }
 </style>
 <noscript><style>#dc-boot .spin,#dc-boot .sub{ display:none; } #dc-boot .retry{ display:block; }</style></noscript>
+<!-- Self-hosted React 18.3.1 (same files unpkg serves; SRI-matched) so rendering
+     never depends on a third-party CDN. support.js's loadReactUmd() short-circuits
+     when window.React/ReactDOM already exist, so it never fetches from unpkg. -->
+<script src="assets/vendor/react.production.min.js"></script>
+<script src="assets/vendor/react-dom.production.min.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
